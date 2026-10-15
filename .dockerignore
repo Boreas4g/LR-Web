@@ -1,0 +1,12 @@
+node_modules
+.git
+.tools
+.turbopack
+dist
+.umi
+.umi-production
+.ruff_cache
+coverage
+apps/control-api/.pytest_cache
+apps/control-api/__pycache__
+apps/control-api/data

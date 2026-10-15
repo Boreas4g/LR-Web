@@ -1,0 +1,26 @@
+# 开发样例（example）：以下是开发实验室的演示巡航点，控制站默认不会读取本
+# 文件。部署时由维护人员把车端已批准的路线快照复制为正式副本（如
+# /etc/lr-platform/cruise-points.yaml 或 /app/config/cruise-points.yaml），
+# 用 LR_CRUISE_POINTS_FILE 指向它并设置 LR_CRUISE_POINTS_ENABLED=true 后，
+# 「同步巡航点」才会把其中 frame_id: map 的点预标到地图上。
+# Approved display snapshot for the control station. Keep this synchronized
+# with the robot's deployed route configuration during maintenance windows.
+points:
+  point1:
+    frame_id: map
+    x: 1.397538
+    y: -0.780363
+    z: 0.0
+    yaw: 3.103380
+  point2:
+    frame_id: map
+    x: 1.369096
+    y: -0.763354
+    z: 0.0
+    yaw: -1.523636
+  point3:
+    frame_id: map
+    x: 1.316441
+    y: -0.112874
+    z: 0.0
+    yaw: -1.480150

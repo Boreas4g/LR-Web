@@ -1,0 +1,17 @@
+services:
+  # web/control-api 应用层已移出 Docker（宿主 lr-control-api.service +
+  # serve-static.cjs 接管）；本文件只保留 EMQX 的生产 TLS 加固。
+  emqx:
+    environment:
+      EMQX_NODE__COOKIE: ${LR_EMQX_NODE_COOKIE:?Set a random EMQX node cookie}
+      EMQX_DASHBOARD__DEFAULT_USERNAME: ${LR_EMQX_DASHBOARD_USERNAME:?Set a non-default EMQX dashboard username}
+      EMQX_DASHBOARD__DEFAULT_PASSWORD: ${LR_EMQX_DASHBOARD_PASSWORD:?Set a strong EMQX dashboard password}
+    ports: !override
+      - "${LR_MQTT_TLS_BIND_ADDRESS:-0.0.0.0}:${LR_MQTT_TLS_PORT:-8883}:8883"
+      # Maintenance API only; never expose the EMQX Dashboard to the LAN.
+      - "${LR_EMQX_DASHBOARD_BIND_ADDRESS:-127.0.0.1}:${LR_EMQX_DASHBOARD_PORT:-18083}:18083"
+    volumes:
+      - ../emqx/production.emqx.conf:/opt/emqx/etc/emqx.conf:ro
+      - ../emqx/production.acl.conf:/opt/emqx/etc/acl.conf:ro
+      - ${LR_MQTT_CERTS_DIR:?Set the directory containing CA, server and control-api certificates}:/opt/emqx/etc/certs:ro
+      - ${LR_EMQX_BOOTSTRAP_USERS_FILE:?Set a private EMQX bootstrap user CSV}:/opt/emqx/etc/auth-built-in-db-bootstrap.csv:ro

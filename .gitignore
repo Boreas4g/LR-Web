@@ -1,0 +1,74 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+**/node_modules
+**/.venv
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/*.egg-info
+*.pyc
+.tools/
+apps/control-api/data/
+.env
+.env.*
+!.env.example
+infra/private/
+pki/
+release/
+# roadhog-api-doc ignore
+/src/utils/request-temp.js
+_roadhog-api-doc
+
+# production
+/dist
+
+# misc
+.DS_Store
+npm-debug.log*
+yarn-error.log
+
+/coverage
+.idea
+yarn.lock
+*bak
+.vscode
+
+
+# visual studio code
+.history
+*.log
+functions/*
+.temp/**
+
+# claude code local settings
+.claude/settings.local.json
+
+# umi
+.umi
+.umi-production
+.umi-test
+.umi-undefined
+.turbopack
+
+# screenshot
+screenshot
+.firebase
+
+build
+
+# worktrees
+.worktrees
+
+# superpowers docs
+docs/superpowers
+
+# cloudflare wrangler
+.wrangler
+requestRecord.mock.js
+
+# runtime logs
+log/
+
+# deploy artifact exceeds GitHub 100MB file limit
+lr-oneclick-deploy-*.tar.gz

@@ -1,0 +1,59 @@
+{
+  "name": "lr-robot-dispatch-desktop",
+  "version": "1.0.0",
+  "description": "智巡图书馆机器人调度桌面端",
+  "desktopName": "cn.lr.platform.dispatch",
+  "main": "main.cjs",
+  "author": {
+    "name": "LR Platform",
+    "email": "support@lr-platform.local"
+  },
+  "homepage": "https://lr-platform.local",
+  "license": "UNLICENSED",
+  "private": true,
+  "build": {
+    "appId": "cn.lr.platform.dispatch",
+    "productName": "智巡机器人调度",
+    "electronVersion": "43.2.0",
+    "compression": "maximum",
+    "asar": true,
+    "artifactName": "LR-Robot-Dispatch-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "../release/desktop"
+    },
+    "files": [
+      "**/*",
+      "!*.test.cjs"
+    ],
+    "extraResources": [
+      {
+        "from": "assets/icon.png",
+        "to": "icon.png"
+      }
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "icon": "assets/icon.png",
+      "syncDesktopName": true
+    },
+    "deb": {
+      "afterInstall": "after-install.sh"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

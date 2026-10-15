@@ -1,0 +1,192 @@
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*1GSgSYDD_aIAAAAAQsAAAAgAegCCAQ/AlibabaSans-Light.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*2zEUQqnPNesAAAAAQtAAAAgAegCCAQ/AlibabaSans-Regular.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*E_cxRbMlZqUAAAAAQuAAAAgAegCCAQ/AlibabaSans-Medium.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*E_cxRbMlZqUAAAAAQuAAAAgAegCCAQ/AlibabaSans-Bold.woff2")
+    format("woff2");
+}
+@font-face {
+  font-family: "AlibabaSans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("//mdn.alipayobjects.com/huamei_iwk9zp/afts/file/A*E_cxRbMlZqUAAAAAQuAAAAgAegCCAQ/AlibabaSans-Heavy.woff2")
+    format("woff2");
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family:
+    AlibabaSans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+html[data-theme='light'] {
+  --app-bg: #f0f5f9;
+  --map-background: linear-gradient(135deg, #e9eff5, #d6e2ef);
+  --map-border: #d9e2ec;
+  --map-wall: #8fa3b8;
+  --map-zone: rgba(22, 119, 255, 0.12);
+  --map-point-bg: #fff;
+  --map-label: #1f2937;
+}
+
+html[data-theme='dark'] {
+  --app-bg: #141414;
+  --map-background: linear-gradient(135deg, #1d2733, #111820);
+  --map-border: #3d4b59;
+  --map-wall: #63788c;
+  --map-zone: rgba(22, 119, 255, 0.2);
+  --map-point-bg: #1f1f1f;
+  --map-label: #f0f0f0;
+}
+
+body {
+  background: var(--app-bg);
+  transition: background-color 0.2s ease;
+}
+
+.ant-pro-page-container-children-container {
+  padding-block-start: 0;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+.ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  left: unset;
+}
+
+.ant-pro-sider-collapsed .ant-pro-sider-link span:not([role='img']) {
+  display: none;
+}
+
+.user-menu-button {
+  align-items: center;
+  display: inline-flex;
+  gap: 8px;
+  height: 40px;
+  padding: 4px 8px;
+}
+
+.user-menu-details {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.user-menu-name,
+.user-menu-role {
+  display: block;
+  max-width: 112px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-menu-name {
+  font-weight: 500;
+}
+
+.user-menu-role {
+  font-size: 12px;
+}
+
+// In mix mode, the framework supplies the fixed header. Leave its primary
+// navigation empty and keep all business navigation in the sider.
+.ant-pro-top-nav-header-menu {
+  display: none;
+}
+
+.auth-page {
+  align-items: center;
+  background: var(--app-bg);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.auth-page .ant-pro-form-login-container {
+  background: var(--ant-color-bg-container, #fff);
+  border: 1px solid var(--ant-color-border-secondary, #f0f0f0);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 8%);
+  padding: 36px 40px;
+}
+
+.auth-tip {
+  margin-bottom: 20px;
+}
+
+.auth-link-row {
+  margin-top: 4px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .user-menu-details {
+    display: none;
+  }
+}
+
+canvas {
+  display: block;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@media (max-width: 768px) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}

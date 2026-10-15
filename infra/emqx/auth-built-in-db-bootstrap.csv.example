@@ -1,0 +1,3 @@
+user_id,password,is_superuser
+lr-control-api,replace-with-a-unique-control-api-password,false
+LR-01,replace-with-a-unique-LR-01-password,false

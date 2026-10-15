@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>控制站连接</title>
+    <link rel="stylesheet" href="setup.css" />
+  </head>
+  <body>
+    <main class="setup-shell">
+      <section class="setup-panel" aria-labelledby="app-title">
+        <img class="app-icon" src="assets/icon.png" alt="" width="64" height="64" />
+        <h1 id="app-title">智巡机器人调度</h1>
+        <p class="section-label">控制站连接</p>
+
+        <section class="discovery-section" aria-labelledby="discovery-title">
+          <div class="section-heading">
+            <div>
+              <h2 id="discovery-title">发现到的控制站</h2>
+              <p>选择后将验证控制站证书和设备身份。</p>
+            </div>
+            <button id="refresh-discovery-button" class="secondary-button" type="button">
+              刷新
+            </button>
+          </div>
+          <p id="discovery-status" class="discovery-status" aria-live="polite">
+            正在搜索本局域网中的控制站…
+          </p>
+          <div id="station-list" class="station-list" aria-live="polite"></div>
+        </section>
+
+        <p class="manual-title">未发现时，由维护人员输入地址</p>
+
+        <form id="station-form">
+          <label for="station-url">控制站地址</label>
+          <div class="field-row">
+            <input
+              id="station-url"
+              name="station-url"
+              type="url"
+              inputmode="url"
+              autocomplete="url"
+              spellcheck="false"
+              placeholder="https://192.168.1.10"
+              required
+            />
+            <button id="connect-button" type="submit">连接</button>
+          </div>
+        </form>
+
+        <p id="connection-error" class="connection-error" role="alert" hidden></p>
+        <div class="status-row">
+          <span id="connection-status">等待连接</span>
+          <span id="app-version"></span>
+        </div>
+      </section>
+    </main>
+    <script src="setup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,115 @@
+openapi: 3.1.0
+info:
+  title: 智巡-图书馆机器人 Gateway API
+  version: 0.1.0
+paths:
+  /health:
+    get:
+      summary: 中心 API 健康检查
+      responses:
+        '200': { description: 服务状态 }
+  /api/v1/auth/login:
+    post:
+      summary: 用户登录并签发访问令牌
+      responses:
+        '200': { description: 登录成功 }
+        '401': { description: 账号或密码错误 }
+  /api/v1/auth/register:
+    post:
+      summary: 注册馆员账户
+      responses:
+        '201': { description: 注册成功 }
+        '409': { description: 账号已存在 }
+  /api/v1/robots:
+    get:
+      summary: 获取机器人状态
+      responses:
+        '200':
+          description: 机器人列表
+    post:
+      summary: 登记机器人与 Gateway 地址
+      responses:
+        '201': { description: 机器人已登记 }
+        '409': { description: 机器人 ID 已存在 }
+  /api/v1/robots/{robotId}:
+    delete:
+      summary: 永久删除机器人及其运行数据
+      parameters:
+        - name: robotId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: 机器人已删除 }
+        '404': { description: 机器人不存在 }
+  /api/v1/robots/{robotId}/commands:
+    post:
+      summary: 创建高层机器人命令
+      parameters:
+        - name: robotId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [command]
+              properties:
+                command:
+                  type: string
+                  enum: [navigate, cruise, charge, pause, resume, cancel, emergency_stop, start_manual_control, manual_jog, stop_manual_control]
+                payload:
+                  type: object
+      responses:
+        '202': { description: 命令已排队 }
+        '409': { description: 机器人状态或资源锁不允许执行 }
+  /api/v1/robots/{robotId}/manual-control/lease:
+    post:
+      summary: 维护人员申请限时手动控制租约
+      parameters:
+        - name: robotId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: 租约、速度和点动限制 }
+        '403': { description: 非维护人员 }
+        '409': { description: 机器人或现有租约不允许接管 }
+  /api/v1/robots/{robotId}/manual-control/jog:
+    post:
+      summary: 使用有效租约发送一次低速、短时点动意图
+      parameters:
+        - name: robotId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '202': { description: 点动命令已排队 }
+        '403': { description: 非维护人员 }
+        '409': { description: 租约无效、到期或机器人状态不安全 }
+  /api/v1/dispatch/tasks:
+    get:
+      summary: 获取调度任务
+      responses:
+        '200': { description: 任务列表 }
+  /api/v1/alerts:
+    get:
+      summary: 获取告警
+      responses:
+        '200': { description: 告警列表 }
+components:
+  schemas:
+    RobotCommand:
+      type: object
+      required: [commandId, robotId, command, expiresAt, idempotencyKey]
+      properties:
+        commandId: { type: string }
+        robotId: { type: string }
+        command: { type: string }
+        expiresAt: { type: string, format: date-time }
+        idempotencyKey: { type: string }
+        taskId: { type: string }
+        payload: { type: object }

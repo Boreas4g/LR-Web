@@ -1,0 +1,53 @@
+services:
+  # The control-api and web tiers were retired from Docker: this station runs
+  # the control API directly on the host (lr-control-api.service) and serves
+  # the web build with scripts/serve-static.cjs, so Compose now manages only
+  # the shared infrastructure below. Git history keeps the old app tier.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: library_robot
+      POSTGRES_USER: library_robot
+      POSTGRES_PASSWORD: ${LR_POSTGRES_PASSWORD:-change-me-before-production}
+    ports: ["${LR_POSTGRES_BIND_ADDRESS:-127.0.0.1}:${LR_POSTGRES_PORT:-5432}:5432"]
+    volumes: ["postgres-data:/var/lib/postgresql/data"]
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U library_robot -d library_robot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  redis:
+    image: redis:7-alpine
+    ports: ["${LR_REDIS_BIND_ADDRESS:-127.0.0.1}:${LR_REDIS_PORT:-6379}:6379"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: library_robot
+      MINIO_ROOT_PASSWORD: ${LR_MINIO_ROOT_PASSWORD:-change-me-before-production}
+    ports:
+      - "${LR_MINIO_BIND_ADDRESS:-127.0.0.1}:${LR_MINIO_PORT:-9000}:9000"
+      - "${LR_MINIO_BIND_ADDRESS:-127.0.0.1}:${LR_MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes: ["minio-data:/data"]
+    restart: unless-stopped
+  emqx:
+    # Keep the daily appliance start usable without registry access.  A
+    # deployment can override this with a reviewed, pinned image reference
+    # through LR_EMQX_IMAGE before its explicit update window.
+    image: ${LR_EMQX_IMAGE:-emqx/emqx:5}
+    # Plain MQTT is intentionally loopback-only for local all-in-one debugging.
+    # Production robots use the TLS listener from docker-compose.production.yml.
+    ports:
+      - "${LR_MQTT_BIND_ADDRESS:-127.0.0.1}:${LR_MQTT_PORT:-1883}:1883"
+      - "${LR_EMQX_DASHBOARD_BIND_ADDRESS:-127.0.0.1}:${LR_EMQX_DASHBOARD_PORT:-18083}:18083"
+    restart: unless-stopped
+volumes:
+  postgres-data:
+  minio-data:
