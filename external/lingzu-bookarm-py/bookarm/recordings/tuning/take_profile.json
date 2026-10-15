@@ -1,0 +1,93 @@
+{
+  "zero_joint": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "debug_joint": [
+    0.0,
+    0.17453292519943295,
+    -1.1344640137963142,
+    0.8726646259971648,
+    0.0,
+    0.0
+  ],
+  "pregrasp_offset_cm": [
+    10.0,
+    -2.0,
+    -2.0
+  ],
+  "grasp_rpy_deg": [
+    75.0,
+    0.0,
+    90.0
+  ],
+  "approach_offset_cm": [
+    -0.5,
+    -2.0,
+    -2.0
+  ],
+  "fine_grasp_offset_cm": [
+    2.0,
+    -2.0,
+    -1.0
+  ],
+  "fine_grasp_rpy_deg": [
+    90.0,
+    0.0,
+    90.0
+  ],
+  "post_grasp_offset_cm": [
+    13.5,
+    0.0,
+    8.0
+  ],
+  "post_grasp_rpy_offset_deg": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "rod_grasp_deg": -90.0,
+  "rod_home_deg": 0.0,
+  "rod_speed": 1000,
+  "rod_acceleration": 50,
+  "zero_duration_s": 3.0,
+  "pregrasp_duration_s": 3.0,
+  "approach_duration_s": 2.0,
+  "fine_grasp_duration_s": 2.0,
+  "post_grasp_duration_s": 2.0,
+  "debug_duration_s": 3.0,
+  "joint_tolerance_rad": 0.08,
+  "rod_tolerance_deg": 1.5,
+  "rod_timeout_s": 12.0,
+  "speed_level": "fast",
+  "gripper": {
+    "open_deg": 30.0,
+    "close_deg": 108.5,
+    "open_speed_deg_s": 16.7,
+    "close_speed_deg_s": 16.7,
+    "effort": 0.5,
+    "kp": 40.0,
+    "kd": 3.0,
+    "timeout_s": 10.0,
+    "monitor_period_s": 0.05,
+    "target_tolerance_deg": 2.0,
+    "stall_tolerance_deg": 0.4,
+    "stall_time_s": 0.6,
+    "min_monitor_s": 0.4,
+    "hold_margin_deg": 0.5,
+    "command_lead_s": 0.25,
+    "stall_lead_threshold_deg": 3.0,
+    "close_timeout_margin_s": 1.5,
+    "start_effort": 0.6,
+    "start_boost_s": 0.4,
+    "contact_hold_offset_deg": 2.0,
+    "contact_hold_duration_s": 1.0,
+    "contact_hold_rate_hz": 20.0,
+    "carry_effort": 0.2,
+    "carry_lead_deg": 1.0
+  }
+}

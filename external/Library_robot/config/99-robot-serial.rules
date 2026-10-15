@@ -1,0 +1,10 @@
+# Robot serial port aliases.
+#
+# ttyACM devices have unique USB serial numbers, so bind them by serial.
+# CH341 ttyUSB devices do not expose unique serial numbers here, so bind them
+# by physical USB path. Keep those devices plugged into the same USB ports.
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="5B8E670052", MODE="0666", SYMLINK+="laser_back"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d4", ATTRS{serial}=="5B8E671843", MODE="0666", SYMLINK+="laser_port"
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="55d3", ATTRS{serial}=="5B90145622", MODE="0666", SYMLINK+="chassis_serial_port"
+SUBSYSTEM=="tty", ENV{ID_PATH}=="pci-0000:00:14.0-usb-0:6.4:1.0", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", MODE="0666", SYMLINK+="imu_port"

@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+build/
+dist/
+*.egg-info/
+
+# Deployment calibration contains equipment-specific poses.
+config/calibration/book_stand_slots.json
+config/calibration/camera_to_base.json

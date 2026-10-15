@@ -1,0 +1,20 @@
+[Unit]
+Description=LR 机器人手动建图栈（底盘驱动 + 双 lslidar + dual_laser_merger + slam_toolbox）
+After=network-online.target
+Wants=network-online.target
+# 与导航栈互斥：两者都独占雷达与底盘。由 lr-robot-mapping-agent 通过
+# systemctl 显式切换，本单元不 enable 自启。
+Conflicts=lr-robot-runtime.service
+
+[Service]
+Type=simple
+User=boreas
+WorkingDirectory=/home/boreas/LR/Library_robot
+Environment=ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/boreas/LR/Library_robot/install/setup.bash && exec ros2 launch mobile_robot_nav_bringup mapping_with_drivers.launch.py use_rviz:=false'
+Restart=on-failure
+RestartSec=5
+# 与 lr-robot-runtime 相同的停止策略：先通知 launch 主进程优雅退出，
+# 超时后由 systemd 清理子进程。
+KillMode=mixed
+TimeoutStopSec=15

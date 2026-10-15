@@ -1,0 +1,13 @@
+{
+  "serial": "262322073961",
+  "width": 1280,
+  "height": 720,
+  "depth_width": 1280,
+  "depth_height": 720,
+  "fps": 6,
+  "warmup_frames": 30,
+  "frame_timeout_ms": 5000,
+  "max_attempts": 10,
+  "max_depth_m": 2.0,
+  "grasp_point_from_top_ratio": 0.16666666666666666
+}

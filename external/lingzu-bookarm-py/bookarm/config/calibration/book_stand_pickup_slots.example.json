@@ -1,0 +1,26 @@
+{
+  "description": "Onboard book-stand pickup poses use robot-base metres and radians. Replace null values with supervised calibration results.",
+  "slots": {
+    "1": {
+      "pre_grasp": [null, null, null, null, null, null],
+      "grasp": [null, null, null, null, null, null],
+      "pre_grasp_duration_s": 3.0,
+      "grasp_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    },
+    "2": {
+      "pre_grasp": [null, null, null, null, null, null],
+      "grasp": [null, null, null, null, null, null],
+      "pre_grasp_duration_s": 3.0,
+      "grasp_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    },
+    "3": {
+      "pre_grasp": [null, null, null, null, null, null],
+      "grasp": [null, null, null, null, null, null],
+      "pre_grasp_duration_s": 3.0,
+      "grasp_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    }
+  }
+}

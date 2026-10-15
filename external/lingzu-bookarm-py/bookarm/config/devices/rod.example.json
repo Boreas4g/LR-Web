@@ -1,0 +1,6 @@
+{
+  "port": "/dev/rodmotor",
+  "baudrate": 921600,
+  "timeout_s": 0.2,
+  "poll_interval_s": 0.05
+}

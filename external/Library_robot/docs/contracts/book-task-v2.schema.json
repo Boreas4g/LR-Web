@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lr-control.local/contracts/book-task-v2.schema.json",
+  "title": "LR vehicle book task payload v2",
+  "oneOf": [
+    { "$ref": "#/$defs/borrowTask" },
+    { "$ref": "#/$defs/returnTask" }
+  ],
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,80}$"
+    },
+    "navigationGoal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mapId", "annotationId", "frameId", "x", "y", "yaw"],
+      "properties": {
+        "mapId": { "$ref": "#/$defs/identifier" },
+        "annotationId": { "$ref": "#/$defs/identifier" },
+        "frameId": { "const": "map" },
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "yaw": { "type": "number", "minimum": -6.284, "maximum": 6.284 }
+      }
+    },
+    "book": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "shelfLevel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "levelNo", "slotNo", "liftTargetMm", "liftToleranceMm"],
+      "properties": {
+        "id": { "$ref": "#/$defs/identifier" },
+        "levelNo": { "type": "integer", "minimum": 1, "maximum": 99 },
+        "slotNo": { "type": "integer", "minimum": 1, "maximum": 500 },
+        "liftTargetMm": { "type": "number", "minimum": 600, "maximum": 1260 },
+        "liftToleranceMm": { "type": "number", "exclusiveMinimum": 0, "maximum": 100 }
+      }
+    },
+    "spineImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifactId", "mediaType", "sha256", "sizeBytes"],
+      "properties": {
+        "artifactId": { "$ref": "#/$defs/identifier" },
+        "mediaType": { "enum": ["image/jpeg", "image/png", "image/webp"] },
+        "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "sizeBytes": { "type": "integer", "minimum": 1, "maximum": 8388608 }
+      }
+    },
+    "borrowTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taskId", "operation", "workflowMode", "book", "spineImage", "shelf", "shelfLevel", "delivery"],
+      "properties": {
+        "taskId": { "$ref": "#/$defs/identifier" },
+        "operation": { "const": "borrow" },
+        "workflowMode": { "const": "takeout" },
+        "book": { "$ref": "#/$defs/book" },
+        "spineImage": { "$ref": "#/$defs/spineImage" },
+        "shelf": { "$ref": "#/$defs/navigationGoal" },
+        "shelfLevel": { "$ref": "#/$defs/shelfLevel" },
+        "destinationSlot": { "type": "integer", "minimum": 1, "maximum": 4, "default": 1 },
+        "delivery": { "$ref": "#/$defs/navigationGoal" }
+      }
+    },
+    "returnTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["taskId", "operation", "workflowMode", "book", "leftNeighborSpineImage", "shelf", "shelfLevel", "sourceSlot"],
+      "properties": {
+        "taskId": { "$ref": "#/$defs/identifier" },
+        "operation": { "const": "return" },
+        "workflowMode": { "const": "putback" },
+        "book": { "$ref": "#/$defs/book" },
+        "leftNeighborSpineImage": { "$ref": "#/$defs/spineImage" },
+        "shelf": { "$ref": "#/$defs/navigationGoal" },
+        "shelfLevel": { "$ref": "#/$defs/shelfLevel" },
+        "sourceSlot": { "type": "integer", "minimum": 1, "maximum": 3 }
+      }
+    }
+  }
+}

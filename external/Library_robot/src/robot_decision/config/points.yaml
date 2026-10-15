@@ -1,0 +1,56 @@
+cruise:
+  loop: false
+  point_order:
+    - point4
+
+
+fine_tune:
+  enabled: true
+  trigger_mode: all  # all 表示所有巡航点都微调，selected 表示只微调列表里的点
+  trigger_points: []
+  adjacent_points:
+    point2: point1
+  start_service: /fine_tune/start
+  parameter_service: /fine_tune_node/set_parameters
+  settle_delay_sec: 2.0
+  wait_for_terminal_continue: false
+  cmd_vel_topic: /cmd_vel
+  target_frame: map
+  base_frame: base_link
+  control_rate_hz: 8.0
+  x_tolerance: 0.02
+  y_tolerance: 0.20
+  yaw_tolerance: 0.03
+  max_linear_speed: 0.2
+  max_angular_speed: 0.3
+  k_x: 1.0
+  k_y: 1.0
+  k_yaw: 1.5
+  stage_timeout_sec: 30.0
+  timeout_sec: 90.0
+
+points:
+  point1: # outside
+    frame_id: map
+    x: 1.397538
+    y: -0.780363
+    z: 0.0
+    yaw: 3.103380
+  point2: # r o o m
+    frame_id: map
+    x: 1.369096
+    y: -0.763354
+    z: 0.0
+    yaw: -1.523636
+  point3: #target
+    frame_id: map
+    x: 1.316441
+    y: -0.112874
+    z: 0.0
+    yaw: -1.480150
+  point4: #target
+    frame_id: map
+    x: -0.367933
+    y: 0.368087
+    z: 0.0
+    yaw: -0.044699

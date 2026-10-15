@@ -1,0 +1,36 @@
+{
+  "backend": "socketcan",
+  "can_interface": "can0",
+  "slcan_port": null,
+  "slcan_baudrate": 2000000,
+  "can_bitrate": 1000000,
+  "host_can_id": 253,
+  "control_rate_hz": 200.0,
+  "feedback_max_age_s": 0.35,
+  "feedback_keepalive_interval_s": 0.1,
+  "enable_feedback_timeout_s": 3.0,
+  "final_tolerance_rad": 0.08,
+  "joint_offsets": {
+    "1": 0.0,
+    "2": 0.0,
+    "3": 0.0,
+    "4": 0.0,
+    "5": 0.0,
+    "6": 0.0,
+    "7": 0.0
+  },
+  "max_velocity_rad_s": 3.0,
+  "max_acceleration_rad_s2": 15.0,
+  "max_jerk_rad_s3": 50.0,
+  "velocity_limit_rad_s": 10.0,
+  "gravity_feedforward_ratio": 1.0,
+  "gravity_joint_scale": {
+    "1": 1.0,
+    "2": 1.0,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0,
+    "6": 1.0
+  },
+  "tcp_offset": [0.0, 0.01, -0.14, 0.0, 0.0, 0.0]
+}

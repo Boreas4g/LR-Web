@@ -1,0 +1,11 @@
+lifttable:
+  ros__parameters:
+    port: "/dev/lift_port"
+    baudrate: 19200
+    slave_id: 1
+    timeout: 0.1
+    speed_rpm: 200
+    accel: 100
+    pulse_per_move: 500
+    send_interval_s: 0.01
+    hold_on_shutdown: true

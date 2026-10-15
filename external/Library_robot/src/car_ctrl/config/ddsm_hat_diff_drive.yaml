@@ -1,0 +1,133 @@
+ddsm_hat_diff_drive:
+  ros__parameters:
+    port: /dev/chassis_serial_port
+    baudrate: 115200
+    driver_backend: ddsm_rs485
+
+    # Update these two values to match the chassis geometry.
+    wheel_radius: 0.05025
+    wheel_track: 0.586
+
+    # Motor physical layout: 1=left front, 2=right front, 3=left rear, 4=right rear.
+    # The right side is installed in the opposite direction, so forward chassis
+    # motion is positive RPM on 1/3 and negative RPM on 2/4.
+    motor_ids: [1, 2, 3, 4]
+    motor_signs: [1, -1, 1, -1]
+    command_order: [2, 1, 3, 4]
+
+    cmd_vel_topic: /cmd_vel
+    wheel_speed_topic: /wheel_speeds
+    joint_state_topic: /wheel_joint_states
+    wheel_speed_source_topic: /wheel_speed_source
+    use_motor_feedback: true
+    feedback_timeout: 0.5
+
+    max_rpm: 330
+    accel_rpm_per_sec: 600.0
+    command_rate_hz: 10.0
+    cmd_vel_timeout: 0.5
+
+    heartbeat_ms: 1000
+    hat_act: 1
+    init_hat: true
+    log_serial_tx: false
+    log_serial_rx: true
+    per_motor_command_gap: 0.003
+    feedback_log_rate_hz: 0.0
+
+    # driver_backend=ddsm_rs485 uses the DDSM115 native 10-byte RS485 protocol.
+    # Put the DDSM Driver HAT (A) Serial Control Switch at USB and connect the
+    # host to the Type-C port marked USB before using this backend.
+    rs485_serial_timeout: 0.02
+    rs485_response_timeout: 0.08
+    rs485_set_velocity_mode: true
+    rs485_brake_on_stop: false
+    rs485_feedback_request_on_timeout: true
+    rs485_mode_command_uses_crc: false
+    rs485_log_raw_tx: false
+    rs485_log_raw_rx: false
+    serial_reconnect_period: 1.0
+    feedback_health_timeout: 2.0
+
+imu_driver:
+  ros__parameters:
+    imu_port: /dev/imu_port
+    imu_baud_rate: 9600
+    imu_topic: /imu/data_raw
+    imu_frame: imu_link
+    read_period: 0.005
+    reconnect_period: 1.0
+    no_data_timeout: 2.0
+
+car_odometry:
+  ros__parameters:
+    wheel_speed_topic: /wheel_speeds
+    joint_state_topic: /wheel_joint_states
+    imu_topic: /imu/data_raw
+    scan_odom_topic: /scan_odom
+    odom_topic: /odom
+    odom_frame: odom
+    base_frame: base_link
+    imu_frame: imu_link
+    publish_tf: true
+    use_imu_orientation: false
+    # 2026-09-26 确诊：IMU 陀螺仪芯片故障（0x52 帧三轴恒零、融合 yaw 冻结；串口链路
+    # 零误码、温度字节活动、模块能执行主机命令，排除线缆/配置原因），需更换模块。
+    # 更换前里程计 yaw 不可用（不旋转）；勿用轮差绕行（滑移底盘转弯误差大）。
+    use_imu_angular_velocity: true
+    use_wheel_angular_fallback: false
+
+    # Keep these consistent with the controller section.
+    wheel_radius: 0.05025
+    track_width: 0.586
+
+    linear_scale: 1.0
+    angular_scale: 1.0
+    publish_rate: 25.0
+    wheel_speed_timeout: 1.2
+    wheel_speed_error_log_period: 30.0
+    # The calibrated wheel/IMU estimate is the runtime odometry source. Scan
+    # matching remains available for diagnostics but does not replace /odom.
+    use_scan_odometry: false
+    scan_odom_timeout: 0.5
+    scan_odom_stale_log_period: 30.0
+    imu_timeout: 0.5
+    imu_error_log_period: 1.0
+    # 2026-09-26 更换的 IMU 陀螺仪 z 轴带约 0.4°/s 出厂零偏：轮子证明静止时
+    # 用 EMA 学习零偏并始终扣除，行驶时积分不受零偏污染。
+    gyro_bias_estimation_enabled: true
+    gyro_bias_alpha: 0.002
+    enable_angle_debug: false
+    debug_log_period: 0.5
+    debug_odom_yaw_topic: /debug/odom_yaw_deg
+    debug_imu_yaw_topic: /debug/imu_yaw_deg
+    debug_angular_velocity_topic: /debug/angular_velocity_deg_s
+    debug_gyro_integrated_yaw_topic: /debug/gyro_integrated_yaw_deg
+    debug_x_topic: /debug/odom_x_m
+    debug_y_topic: /debug/odom_y_m
+    debug_distance_topic: /debug/odom_distance_m
+
+scan_odometry:
+  ros__parameters:
+    scan_topic: /scan
+    imu_topic: /imu/data_raw
+    odom_topic: /scan_odom
+    odom_frame: scan_odom
+    base_frame: base_link
+    min_range: 0.20
+    max_range: 12.0
+    point_stride: 4
+    imu_timeout: 0.5
+    # These bounds apply between 10 Hz scans, so invalid/ambiguous data is
+    # rejected rather than allowed to create a map-position jump.
+    max_yaw_per_scan: 0.25
+    max_translation_per_scan: 0.20
+    max_correspondence_distance: 0.18
+    min_correspondences: 25
+    max_residual_rms: 0.06
+    icp_iterations: 6
+    # Stationary scans fluctuate by a few millimetres.  Do not integrate that
+    # noise, but continue publishing a healthy zero-motion laser odometry.
+    translation_deadband: 0.006
+    yaw_deadband: 0.01
+    reject_log_period: 2.0

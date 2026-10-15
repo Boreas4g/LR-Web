@@ -1,0 +1,20 @@
+[Unit]
+Description=LR 手动建图车端 HTTP 代理（127.0.0.1:18090，仅本机回环）
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# 与 ROS 栈同用户运行，避免 root↔boreas 跨用户 DDS 共享内存传输不通的问题；
+# systemctl 切换与地图注册（需 root）通过 boreas 的免密 sudo 完成。
+User=boreas
+Environment=ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST
+Environment=MAPPING_AGENT_HOST=127.0.0.1
+Environment=MAPPING_AGENT_PORT=18090
+ExecStart=/bin/bash -c 'source /opt/ros/jazzy/setup.bash && source /home/boreas/LR/Library_robot/install/setup.bash && exec /usr/bin/python3 /home/boreas/LR/Library_robot/scripts/mapping_agent.py'
+Restart=always
+RestartSec=3
+TimeoutStopSec=10
+
+[Install]
+WantedBy=multi-user.target

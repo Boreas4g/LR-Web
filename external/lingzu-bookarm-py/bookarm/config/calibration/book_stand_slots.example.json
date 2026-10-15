@@ -1,0 +1,45 @@
+{
+  "description": "Book-stand poses use robot-base metres and radians. Slot 1 is the recorded calibration; slots 2--4 must be calibrated before use.",
+  "slots": {
+    "1": {
+      "pre_place": [-0.12, -0.375, 0.333, 1.567305668290908, -0.06981317007977318, 3.079633466308932],
+      "place": [-0.135, -0.4755, 0.2817, 1.6441001553785087, -0.03490658503988659, 3.122394031817856],
+      "lower_place": [null, null, null, null, null, null],
+      "retreat": [-0.12, -0.375, 0.333, 1.567305668290908, -0.06981317007977318, 3.079633466308932],
+      "pre_place_duration_s": 3.0,
+      "place_duration_s": 2.0,
+      "lower_place_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    },
+    "2": {
+      "pre_place": [null, null, null, null, null, null],
+      "place": [null, null, null, null, null, null],
+      "lower_place": [null, null, null, null, null, null],
+      "retreat": [null, null, null, null, null, null],
+      "pre_place_duration_s": 3.0,
+      "place_duration_s": 2.0,
+      "lower_place_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    },
+    "3": {
+      "pre_place": [null, null, null, null, null, null],
+      "place": [null, null, null, null, null, null],
+      "lower_place": [null, null, null, null, null, null],
+      "retreat": [null, null, null, null, null, null],
+      "pre_place_duration_s": 3.0,
+      "place_duration_s": 2.0,
+      "lower_place_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    },
+    "4": {
+      "pre_place": [null, null, null, null, null, null],
+      "place": [null, null, null, null, null, null],
+      "lower_place": [null, null, null, null, null, null],
+      "retreat": [null, null, null, null, null, null],
+      "pre_place_duration_s": 3.0,
+      "place_duration_s": 2.0,
+      "lower_place_duration_s": 2.0,
+      "retreat_duration_s": 2.0
+    }
+  }
+}

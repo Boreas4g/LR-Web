@@ -1,0 +1,7 @@
+{
+  "port": "/dev/lift_port",
+  "address": 1,
+  "baudrate": 19200,
+  "timeout_s": 0.2,
+  "retries": 1
+}

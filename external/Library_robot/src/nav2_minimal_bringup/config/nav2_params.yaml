@@ -1,0 +1,392 @@
+amcl:
+  ros__parameters:
+    use_sim_time: false
+    # Accuracy-oriented AMCL tuning for the N150 mini PC.
+    alpha1: 0.2
+    alpha2: 0.2
+    alpha3: 0.4
+    alpha4: 0.3
+    alpha5: 0.2
+    base_frame_id: "base_link"
+    beam_skip_distance: 0.5
+    beam_skip_error_threshold: 0.9
+    beam_skip_threshold: 0.3
+    do_beamskip: false
+    global_frame_id: "map"
+    lambda_short: 0.1
+    laser_likelihood_max_dist: 1.5
+    laser_max_range: 30.0
+    laser_min_range: 0.0
+    laser_model_type: "likelihood_field"
+    max_beams: 120
+    max_particles: 1500
+    min_particles: 400
+    odom_frame_id: "odom"
+    pf_err: 0.03
+    pf_z: 0.99
+    recovery_alpha_fast: 0.0
+    recovery_alpha_slow: 0.0
+    resample_interval: 2
+    robot_model_type: "nav2_amcl::DifferentialMotionModel"
+    save_pose_rate: 1.0
+    sigma_hit: 0.2
+    tf_broadcast: true
+    transform_tolerance: 1.0
+    # Laser odometry updates at 10 Hz during manual pushing.  Keep thresholds
+    # below a single slow hand-push increment so AMCL applies every real move.
+    update_min_a: 0.05
+    update_min_d: 0.05
+    z_hit: 0.85
+    z_max: 0.05
+    z_rand: 0.10
+    z_short: 0.02
+    scan_topic: /scan
+
+bt_navigator:
+  ros__parameters:
+    use_sim_time: false
+    global_frame: map
+    robot_base_frame: base_link
+    odom_topic: /odom
+    # N150 has enough headroom for a more responsive behavior tree tick.
+    bt_loop_duration: 25
+    # Increase BT action/service wait tolerance for real robot startup jitter.
+    default_server_timeout: 1000
+    wait_for_service_timeout: 5000
+    action_server_result_timeout: 900.0
+    default_nav_to_pose_bt_xml: "__NAV2_BEHAVIOR_TREE_DIR__/navigate_to_pose_w_replanning_and_recovery.xml"
+    default_nav_through_poses_bt_xml: "__NAV2_BEHAVIOR_TREE_DIR__/navigate_through_poses_w_replanning_and_recovery.xml"
+    bt_search_directories:
+      - "__NAV2_BEHAVIOR_TREE_DIR__"
+    navigators: ["navigate_to_pose", "navigate_through_poses"]
+    navigate_to_pose:
+      plugin: "nav2_bt_navigator::NavigateToPoseNavigator"
+    navigate_through_poses:
+      plugin: "nav2_bt_navigator::NavigateThroughPosesNavigator"
+    error_code_names:
+      - compute_path_error_code
+      - follow_path_error_code
+
+bt_navigator_navigate_through_poses_rclcpp_node:
+  ros__parameters:
+    use_sim_time: false
+
+bt_navigator_navigate_to_pose_rclcpp_node:
+  ros__parameters:
+    use_sim_time: false
+
+controller_server:
+  ros__parameters:
+    use_sim_time: false
+    # Accuracy-oriented DWB tuning for the N150 mini PC.
+    controller_frequency: 8.0
+    min_x_velocity_threshold: 0.02
+    min_y_velocity_threshold: 0.0
+    min_theta_velocity_threshold: 0.03
+    failure_tolerance: 0.3
+    progress_checker_plugins: ["progress_checker"]
+    goal_checker_plugins: ["general_goal_checker"]
+    controller_plugins: ["FollowPath"]
+    progress_checker:
+      plugin: "nav2_controller::SimpleProgressChecker"
+      required_movement_radius: 0.12
+      movement_time_allowance: 15.0
+    general_goal_checker:
+      stateful: true
+      plugin: "nav2_controller::StoppedGoalChecker"
+      xy_goal_tolerance: 0.3
+      yaw_goal_tolerance: 6.2
+      trans_stopped_velocity: 0.05
+    FollowPath:
+      plugin: "nav2_rotation_shim_controller::RotationShimController"
+      primary_controller: "dwb_core::DWBLocalPlanner"
+
+      # Rotation Shim 参数：起步先转向
+      angular_dist_threshold: 0.785
+      forward_sampling_distance: 0.5
+      rotate_to_heading_angular_vel: 0.4
+      rotate_to_goal_heading: false
+      max_angular_accel: 1.5
+      simulate_ahead_time: 1.0
+
+      debug_trajectory_details: false
+      # Allow reverse trajectories so goals behind the robot do not force a stall.
+      min_vel_x: -0.12
+      min_vel_y: 0.0
+      max_vel_x: 0.30
+      max_vel_y: 0.0
+      max_vel_theta: 0.8
+      min_speed_xy: 0.0
+      max_speed_xy: 0.30
+      min_speed_theta: 0.08
+      acc_lim_x: 0.25
+      acc_lim_y: 0.0
+      acc_lim_theta: 1.0
+      decel_lim_x: -0.35
+      decel_lim_y: 0.0
+      decel_lim_theta: -0.45
+      vx_samples: 24
+      vy_samples: 1
+      vtheta_samples: 24
+      sim_time: 1.7
+      linear_granularity: 0.03
+      angular_granularity: 0.025
+      transform_tolerance: 0.5
+      xy_goal_tolerance: 0.25
+      yaw_goal_tolerance: 1.57
+      trans_stopped_velocity: 0.05
+      short_circuit_trajectory_evaluation: false
+      stateful: true
+      critics: ["Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+      BaseObstacle.scale: 0.08
+      # Keep reverse available while evaluating heading alignment farther ahead.
+      PathAlign.scale: 14.0
+      PathAlign.forward_point_distance: 0.12
+      GoalAlign.scale: 12.0
+      GoalAlign.forward_point_distance: 0.12
+      PathDist.scale: 32.0
+      GoalDist.scale: 24.0
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      # Accuracy-oriented rolling costmap for the N150 mini PC.
+      update_frequency: 5.0
+      publish_frequency: 2.0
+      global_frame: odom
+      robot_base_frame: base_link
+      use_sim_time: false
+      rolling_window: true
+      width: 5
+      height: 5
+      resolution: 0.05
+      footprint: "[[0.29, 0.29], [0.29, -0.29], [-0.29, -0.29], [-0.29, 0.29]]"
+      footprint_padding: 0.01
+      always_send_full_costmap: false
+      plugins: ["obstacle_layer", "inflation_layer"]
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          data_type: "LaserScan"
+          clearing: true
+          marking: true
+          obstacle_max_range: 3.0
+          obstacle_min_range: 0.0
+          raytrace_max_range: 3.5
+          raytrace_min_range: 0.0
+          max_obstacle_height: 2.0
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        # Shelf docking needs the robot right up against the shelf: 1.2 m of
+        # inflation made every shelf-adjacent goal unreachable ("Failed to
+        # make progress").  The lethal zone still comes from the physical
+        # footprint (~0.3 m) and the collision monitor is unchanged; this only
+        # narrows the decayed-penalty halo so Nav2 can drive to ~0.3 m of the
+        # shelf and hand the final approach to the low-speed fine tune.
+        inflation_radius: 0.4
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      update_frequency: 1.0
+      publish_frequency: 1.0
+      global_frame: map
+      robot_base_frame: base_link
+      use_sim_time: false
+      resolution: 0.05
+      footprint: "[[0.29, 0.29], [0.29, -0.29], [-0.29, -0.29], [-0.29, 0.29]]"
+      footprint_padding: 0.01
+      track_unknown_space: true
+      always_send_full_costmap: false
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
+      static_layer:
+        plugin: "nav2_costmap_2d::StaticLayer"
+        map_subscribe_transient_local: true
+      obstacle_layer:
+        plugin: "nav2_costmap_2d::ObstacleLayer"
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          data_type: "LaserScan"
+          clearing: true
+          marking: true
+          obstacle_max_range: 3.0
+          obstacle_min_range: 0.0
+          raytrace_max_range: 3.5
+          raytrace_min_range: 0.0
+          max_obstacle_height: 2.0
+      inflation_layer:
+        plugin: "nav2_costmap_2d::InflationLayer"
+        cost_scaling_factor: 3.0
+        # See local_costmap: shelf docking needs shelf-adjacent goals to be
+        # plannable.  The planner keeps a slightly wider margin than the
+        # controller (0.5 vs 0.4) for ordinary driving.
+        inflation_radius: 0.5
+
+map_server:
+  ros__parameters:
+    use_sim_time: false
+    yaml_filename: "__NAV2_MAP_YAML__"
+
+map_saver:
+  ros__parameters:
+    use_sim_time: false
+    save_map_timeout: 5.0
+    free_thresh_default: 0.25
+    occupied_thresh_default: 0.65
+    map_subscribe_transient_local: true
+
+planner_server:
+  ros__parameters:
+    expected_planner_frequency: 2.0
+    use_sim_time: false
+    planner_plugins: ["GridBased"]
+
+    GridBased:
+      plugin: "nav2_smac_planner::SmacPlanner2D"
+      tolerance: 0.25
+      downsample_costmap: false
+      downsampling_factor: 1
+      allow_unknown: true
+      max_iterations: 1000000
+      max_on_approach_iterations: 1000
+      max_planning_time: 2.0
+      cost_travel_multiplier: 2.0
+      use_final_approach_orientation: false
+
+smoother_server:
+  ros__parameters:
+    use_sim_time: false
+    smoother_plugins: ["simple_smoother"]
+    simple_smoother:
+      plugin: "nav2_smoother::SimpleSmoother"
+      tolerance: 1.0e-10
+      max_its: 300
+      do_refinement: true
+
+behavior_server:
+  ros__parameters:
+    use_sim_time: false
+    costmap_topic: local_costmap/costmap_raw
+    footprint_topic: local_costmap/published_footprint
+    cycle_frequency: 10.0
+    behavior_plugins: ["spin", "backup", "drive_on_heading", "wait"]
+    spin:
+      plugin: "nav2_behaviors::Spin"
+    backup:
+      plugin: "nav2_behaviors::BackUp"
+    drive_on_heading:
+      plugin: "nav2_behaviors::DriveOnHeading"
+    wait:
+      plugin: "nav2_behaviors::Wait"
+    global_frame: odom
+    robot_base_frame: base_link
+    transform_tolerance: 0.5
+    simulate_ahead_time: 2.0
+    max_rotational_vel: 0.8
+    min_rotational_vel: 0.15
+    rotational_acc_lim: 1.0
+
+robot_state_publisher:
+  ros__parameters:
+    use_sim_time: false
+
+waypoint_follower:
+  ros__parameters:
+    use_sim_time: false
+    loop_rate: 20
+    stop_on_failure: false
+    waypoint_task_executor_plugin: "wait_at_waypoint"
+    wait_at_waypoint:
+      plugin: "nav2_waypoint_follower::WaitAtWaypoint"
+      enabled: true
+      waypoint_pause_duration: 0
+
+velocity_smoother:
+  ros__parameters:
+    use_sim_time: false
+    smoothing_frequency: 30.0
+    scale_velocities: false
+    feedback: "OPEN_LOOP"
+    max_velocity: [0.30, 0.0, 0.8]
+    min_velocity: [-0.12, 0.0, -0.8]
+    max_accel: [0.25, 0.0, 1.0]
+    max_decel: [-0.35, 0.0, -1.20]
+    odom_topic: "odom"
+    odom_duration: 0.1
+    deadband_velocity: [0.01, 0.0, 0.02]
+    velocity_timeout: 0.5
+
+collision_monitor:
+  ros__parameters:
+    base_frame_id: "base_link"
+    odom_frame_id: "odom"
+    cmd_vel_in_topic: "cmd_vel_smoothed"
+    cmd_vel_out_topic: "cmd_vel"
+    state_topic: "collision_monitor_state"
+    transform_tolerance: 0.5
+    source_timeout: 1.0
+    base_shift_correction: true
+    stop_pub_timeout: 2.0
+    polygons: ["FootprintApproach"]
+    FootprintApproach:
+      type: "polygon"
+      action_type: "approach"
+      footprint_topic: "/local_costmap/published_footprint"
+      time_before_collision: 1.8
+      simulation_time_step: 0.025
+      min_points: 4
+      visualize: false
+      enabled: true
+    observation_sources: ["scan"]
+    scan:
+      type: "scan"
+      topic: "scan"
+      min_height: 0.0
+      max_height: 2.0
+      enabled: true
+
+docking_server:
+  ros__parameters:
+    controller_frequency: 20.0
+    initial_perception_timeout: 5.0
+    wait_charge_timeout: 5.0
+    dock_approach_timeout: 30.0
+    undock_linear_tolerance: 0.05
+    undock_angular_tolerance: 0.1
+    max_retries: 3
+    base_frame: "base_link"
+    fixed_frame: "odom"
+    dock_backwards: false
+    dock_prestaging_tolerance: 0.5
+    dock_plugins: ["simple_charging_dock"]
+    simple_charging_dock:
+      plugin: "opennav_docking::SimpleChargingDock"
+      docking_threshold: 0.05
+      staging_x_offset: -0.7
+      use_external_detection_pose: false
+      use_battery_status: false
+      use_stall_detection: false
+      external_detection_timeout: 1.0
+      external_detection_translation_x: -0.18
+      external_detection_translation_y: 0.0
+      external_detection_rotation_roll: -1.57
+      external_detection_rotation_pitch: -1.57
+      external_detection_rotation_yaw: 0.0
+      filter_coef: 0.1
+    controller:
+      k_phi: 3.0
+      k_delta: 2.0
+      v_linear_min: 0.1
+      v_linear_max: 0.15
+      use_collision_detection: true
+      costmap_topic: "local_costmap/costmap_raw"
+      footprint_topic: "local_costmap/published_footprint"
+      transform_tolerance: 0.5
+      projection_time: 5.0
+      simulation_step: 0.05
+      dock_collision_threshold: 0.3

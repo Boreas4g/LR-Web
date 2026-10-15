@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bookarm"
+version = "0.1.0"
+description = "Extensible book-arm workflow SDK"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy<2.4",
+]
+
+[project.optional-dependencies]
+hardware = ["aim_sdk>=0.1.0", "pyserial>=3.5", "pyrealsense2"]
+kinematics = ["pin"]
+# Starlette 1.5 moved TestClient onto the separately versioned httpx2
+# transport. Keep the complete, hardware-free regression command installable
+# in a fresh environment instead of relying on an unrelated global package.
+test = ["pytest>=8", "httpx2>=2.0"]
+service = ["fastapi", "uvicorn", "python-multipart", "opencv-python"]
+
+[project.scripts]
+bookarm-takeout-service = "bookarm.service.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+bookarm = ["resources/urdf/*.urdf"]

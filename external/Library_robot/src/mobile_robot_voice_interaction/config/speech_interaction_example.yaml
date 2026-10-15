@@ -1,0 +1,21 @@
+speech_interaction:
+  ros__parameters:
+    port: /dev/speech_port
+    baudrate: 115200
+    poll_hz: 20.0
+    dedupe_window_sec: 0.7
+    heard_signal_rules:
+      - "4=motion_forward"
+      - "5=motion_backward"
+      - "6=motion_left"
+      - "7=motion_right"
+      - "19=nav_goal_1"
+      - "20=nav_goal_2"
+      - "21=nav_goal_3"
+      - "32=nav_goal_4"
+      - "33=nav_goal_origin"
+    speak_signal_rules:
+      - "nav_ready=goal_one"
+      - "nav_arrived=goal_origin"
+      - "lights_red=red_light"
+      - "lights_off=close_light"

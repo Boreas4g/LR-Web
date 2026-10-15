@@ -1,0 +1,110 @@
+{
+  "slots": {
+    "1": {
+      "pre_grasp": [
+        -0.135,
+        -0.305,
+        0.4,
+        1.570796,
+        -0.087266,
+        3.141593
+      ],
+      "grasp": [
+        -0.135,
+        -0.52,
+        0.275,
+        1.22173,
+        -0.087266,
+        3.141593
+      ],
+      "pre_grasp_duration_s": 3,
+      "grasp_duration_s": 1.5,
+      "retreat_duration_s": 2
+    },
+    "2": {
+      "pre_grasp": [
+        -0.08,
+        -0.305,
+        0.35,
+        1.570796,
+        -0.087266,
+        3.141593
+      ],
+      "grasp": [
+        -0.08,
+        -0.52,
+        0.275,
+        1.22173,
+        -0.087266,
+        3.141593
+      ],
+      "pre_grasp_duration_s": 2.5,
+      "grasp_duration_s": 1.5,
+      "retreat_duration_s": 1.5
+    },
+    "3": {
+      "pre_grasp": [
+        -0.02,
+        -0.305,
+        0.35,
+        1.570796,
+        -0.087266,
+        3.141593
+      ],
+      "grasp": [
+        -0.02,
+        -0.52,
+        0.275,
+        1.22173,
+        -0.087266,
+        3.141593
+      ],
+      "pre_grasp_duration_s": 2.5,
+      "grasp_duration_s": 1.5,
+      "retreat_duration_s": 1.5
+    },
+    "4": {
+      "pre_grasp": [
+        0.025,
+        -0.305,
+        0.35,
+        1.570796,
+        -0.087266,
+        3.141593
+      ],
+      "grasp": [
+        0.025,
+        -0.52,
+        0.275,
+        1.22173,
+        -0.087266,
+        3.141593
+      ],
+      "pre_grasp_duration_s": 2.5,
+      "grasp_duration_s": 1.5,
+      "retreat_duration_s": 1.5
+    },
+    "5": {
+      "pre_grasp": [
+        0.07,
+        -0.305,
+        0.35,
+        1.570796,
+        -0.087266,
+        3.141593
+      ],
+      "grasp": [
+        0.07,
+        -0.52,
+        0.275,
+        1.22173,
+        -0.087266,
+        3.141593
+      ],
+      "pre_grasp_duration_s": 2.5,
+      "grasp_duration_s": 1.5,
+      "retreat_duration_s": 1.5
+    }
+  },
+  "description": "BookArm book-stand slot calibration written by the tuning API; units: robot-base metres and radians."
+}

@@ -1,0 +1,77 @@
+edge_gateway_node:
+  ros__parameters:
+    # Keep this identity unique for each physical robot.
+    robot_id: "LR-01"
+
+    # Set this to the control-platform computer's LAN IP before customer delivery.
+    # A real deployment also uses a per-robot account and TLS.
+    mqtt_host: "127.0.0.1"
+    mqtt_port: 1883
+    mqtt_protocol_version: "3.1.1"
+    mqtt_tls_enabled: false
+    mqtt_ca_file: ""
+    mqtt_username: ""
+    mqtt_password: ""
+
+    # Local single-machine development defaults only. Do not copy these map
+    # values to a production vehicle; use install-control-station-gateway.sh.
+    # A production map must match LR-Web and the map loaded by Nav2.
+    allowed_map_ids:
+      - "MAP-F18C1F27DC2E"
+    active_map_id: "MAP-F18C1F27DC2E"
+    map_registry_file: ""
+    map_state_file: "~/.local/state/lr-robot/active_map.json"
+    map_load_service: "/map_server/load_map"
+    auto_localize_service: "/localization/auto_localize"
+    map_switch_topic: "/localization/map_switch"
+    # Bounds of the enabled 302 laboratory map, in ROS map coordinates (metres).
+    map_min_x: -4.441
+    map_max_x: 3.879
+    map_min_y: -1.751
+    map_max_y: 5.209
+    max_abs_yaw: 6.284
+
+    command_queue_size: 10
+    navigate_action_name: "navigate_to_pose"
+    # Manual jog goes straight to the chassis, bypassing Nav2's velocity
+    # smoother and collision monitor: the operator drives by sight and the
+    # approach zone near shelves must not cut off manual control. Navigation
+    # commands still flow through the full safety chain.
+    manual_cmd_vel_topic: "/cmd_vel"
+    manual_command_timeout_seconds: 1.0
+    amcl_pose_topic: "/amcl_pose"
+    initial_pose_topic: "/initialpose"
+    localization_status_topic: "/localization/status"
+    localization_scan_mode_topic: "/localization/scan_mode"
+    chassis_status_topic: "/wheel_speed_source"
+    chassis_status_timeout_seconds: 2.5
+    # /imu/data_raw freshness gate. car_odometry integrates the IMU gyro z
+    # axis, so a silent IMU dropout degrades odometry and localization without
+    # any other fault; telemetry then reports imuReady: false and navigation
+    # is rejected until fresh samples return. Deployments under /etc may omit
+    # this and keep the node default (2.0 s).
+    imu_stale_timeout_seconds: 2.0
+    # The source topic proves that all four values come from encoders. The
+    # speed topic additionally proves the base is stationary for recovery.
+    wheel_speed_topic: "/wheel_speeds"
+    wheel_speed_timeout_seconds: 1.0
+    base_stationary_speed_threshold_mps: 0.01
+    # takeout talks HTTP over the production daemon's private Unix socket and
+    # carries the Bearer token from LR_GATEWAY_BOOKARM_TOKEN (runtime.env).
+    # legacy/sdk stay available for supervised rollbacks to the old WebUI/SDK.
+    bookarm_backend: "takeout"
+    bookarm_api_url: "http://127.0.0.1:18080/api/v1"
+    bookarm_timeout_seconds: 3.0
+    bookarm_rod_device: "/dev/rodmotor"
+    bookarm_lift_device: "/dev/lift_port"
+    bookarm_takeout_socket: "/run/lr-bookarm/bookarm.sock"
+    # Leave empty: the token is injected from /etc/lr-robot/runtime.env so the
+    # shared secret never lives in a Git-tracked file.
+    bookarm_takeout_token: ""
+    # Empty derives https://<mqtt_host>; downloads always use the robot mTLS identity.
+    hardware_profile: "LR-01-edulite-a3-v1"
+    telemetry_period_seconds: 0.5
+    # Do not timestamp an old AMCL coordinate as if it were newly measured.
+    pose_stale_timeout_seconds: 5.0
+    max_position_variance: 0.5
+    max_yaw_variance: 0.35

@@ -1,0 +1,9 @@
+python3 scripts/api/take_book_test.py \
+    --height-mm 800 \
+    --speed-level 2 \
+    --template assets/pic/book_spine/book1.jpeg \
+    --camera-calibration config/calibration/camera_to_base.example.json \
+    --slot 1 \
+    --stop-after book_stand_place \
+    --grasp-point-from-top 1/3 \
+    --confirm

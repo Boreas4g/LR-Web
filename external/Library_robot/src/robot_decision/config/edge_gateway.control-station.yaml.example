@@ -1,0 +1,75 @@
+# Copy this file to /etc/lr-robot/edge-gateway.yaml, replace every placeholder
+# and set LR_GATEWAY_PARAMS_FILE in /etc/lr-robot/runtime.env. Do not put
+# customer passwords or private keys back into this workspace.
+edge_gateway_node:
+  ros__parameters:
+    robot_id: "LR-01"
+
+    # The robot initiates this connection. There is no inbound ROS, serial or
+    # chassis-control listener on the robot LAN interface.
+    mqtt_host: "control-station.example"
+    mqtt_port: 8883
+    mqtt_protocol_version: "3.1.1"
+    mqtt_tls_enabled: true
+    mqtt_ca_file: "/etc/lr-robot/mqtt/ca.crt"
+    mqtt_client_cert_file: "/etc/lr-robot/mqtt/LR-01.crt"
+    mqtt_client_key_file: "/etc/lr-robot/mqtt/LR-01.key"
+    mqtt_username: "LR-01"
+    mqtt_password: "replace-with-the-LR-01-broker-password"
+
+    allowed_map_ids:
+      - "MAP-REPLACE-WITH-APPROVED-ID"
+    active_map_id: "MAP-REPLACE-WITH-APPROVED-ID"
+    # A root-managed local registry is required for automatic map switching.
+    # MQTT commands select only an ID from this file; they never contain paths.
+    map_registry_file: "/etc/lr-robot/map-registry.yaml"
+    map_state_file: "/home/boreas/.local/state/lr-robot/active_map.json"
+    map_load_service: "/map_server/load_map"
+    auto_localize_service: "/localization/auto_localize"
+    map_switch_topic: "/localization/map_switch"
+    # Replace these values with the bounds calculated from the loaded map YAML.
+    map_min_x: 0.0
+    map_max_x: 1.0
+    map_min_y: 0.0
+    map_max_y: 1.0
+    max_abs_yaw: 6.284
+
+    command_queue_size: 10
+    navigate_action_name: "navigate_to_pose"
+    manual_cmd_vel_topic: "/cmd_vel_nav"
+    manual_command_timeout_seconds: 1.0
+    amcl_pose_topic: "/amcl_pose"
+    initial_pose_topic: "/initialpose"
+    localization_status_topic: "/localization/status"
+    localization_scan_mode_topic: "/localization/scan_mode"
+    chassis_status_topic: "/wheel_speed_source"
+    chassis_status_timeout_seconds: 2.5
+    wheel_speed_topic: "/wheel_speeds"
+    wheel_speed_timeout_seconds: 1.0
+    base_stationary_speed_threshold_mps: 0.01
+    # takeout talks HTTP over the production daemon's private Unix socket and
+    # carries the Bearer token from LR_GATEWAY_BOOKARM_TOKEN (runtime.env).
+    # legacy/sdk stay available for supervised rollbacks to the old WebUI/SDK.
+    bookarm_backend: "takeout"
+    bookarm_api_url: "http://127.0.0.1:18080/api/v1"
+    bookarm_timeout_seconds: 3.0
+    bookarm_rod_device: "/dev/rodmotor"
+    bookarm_lift_device: "/dev/lift_port"
+    bookarm_takeout_socket: "/run/lr-bookarm/bookarm.sock"
+    # Leave empty: the token is injected from /etc/lr-robot/runtime.env so the
+    # shared secret never lives in a Git-tracked file.
+    bookarm_takeout_token: ""
+    # Every automatic book task must pass this final dynamic shelf-pose gate
+    # after Nav2 reports arrival and before the BookArm workflow starts.
+    book_shelf_fine_tune_enabled: true
+    book_shelf_fine_tune_parameter_service: "/book_shelf_fine_tune_node/set_parameters"
+    book_shelf_fine_tune_start_service: "/book_shelf_fine_tune/start"
+    book_shelf_fine_tune_abort_service: "/book_shelf_fine_tune/abort"
+    book_shelf_fine_tune_settle_delay_seconds: 1.0
+    # Evidence-backed local adapter profile. This name never enables an
+    # unverified sensor or automatic book workflow by itself.
+    hardware_profile: "LR-01-edulite-a3-v1"
+    telemetry_period_seconds: 0.5
+    pose_stale_timeout_seconds: 5.0
+    max_position_variance: 0.5
+    max_yaw_variance: 0.35

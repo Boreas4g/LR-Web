@@ -1,0 +1,13 @@
+Turntable:
+  ros__parameters:
+    port: "/dev/ttyACM2"
+    baudrate: 115200
+    timeout: 0.02
+    write_timeout: 1.0
+    open_delay_s: 2.0
+    send_hz: 20.0
+    continuous_send: false
+    default_position: 0.0
+    default_kp: 2.0
+    default_velocity: 0.0
+    default_kd: 0.1
